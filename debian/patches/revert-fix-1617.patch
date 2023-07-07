@@ -1,0 +1,226 @@
+Description: Revert fix for upstream bug #1617
+ This patch reverts changes which caused TabStack demo
+ to segfault when starting.
+ https://sourceforge.net/p/motif/code/ci/2b90f83a51ac73b1238e7f9b64949667ddbdd8fe/
+Bug: http://bugs.motifzone.net/show_bug.cgi?id=1661
+Author: Graham Inggs <ginggs@bdeian.org>
+Last-Update: 2017-08-04
+--- a/demos/programs/ColorSel/util-c.c
++++ b/demos/programs/ColorSel/util-c.c
+@@ -1412,17 +1412,17 @@
+ 	switch(toVal.size)
+ 	{
+ 	case 1:
+-	    val = (XTPOINTER)(unsigned)(*(char*)toVal.addr);    /* may be exists bug */
++	    val = (XTPOINTER)(*(char*)toVal.addr);
+ 	    break;
+ 	case 2:
+-	    val = (XTPOINTER)(unsigned)(*(short*)toVal.addr);    /* may be exists bug */
++	    val = (XTPOINTER)(*(short*)toVal.addr);
+ 	    break;
+ 	case 4:
+-	    val = (XTPOINTER)(unsigned)(*(int*)toVal.addr);      /* may be exists bug */
++	    val = (XTPOINTER)(*(int*)toVal.addr);
+ 	    break;
+ 	case 8:
+ 	default:
+-	    val = (XTPOINTER)(unsigned)(*(long*)toVal.addr);     /* may be exists bug */
++	    val = (XTPOINTER)(*(long*)toVal.addr);
+ 	    break;
+ 	}
+     }
+@@ -2178,11 +2178,11 @@
+      * initialize return values
+      */
+     if (pixmap_return) {
+-        *pixmap_return = (Pixmap)NULL;
++        *pixmap_return = NULL;
+         imageptr = &image;
+     }
+     if (shapemask_return) {
+-        *shapemask_return = (Pixmap)NULL;
++        *shapemask_return = NULL;
+         shapeimageptr = &shapeimage;
+     }
+ 
+--- a/demos/programs/Ext18List/util-c.c
++++ b/demos/programs/Ext18List/util-c.c
+@@ -1412,17 +1412,17 @@
+ 	switch(toVal.size)
+ 	{
+ 	case 1:
+-	    val = (XTPOINTER)(unsigned)(*(char*)toVal.addr);
++	    val = (XTPOINTER)(*(char*)toVal.addr);
+ 	    break;
+ 	case 2:
+-	    val = (XTPOINTER)(unsigned)(*(short*)toVal.addr);
++	    val = (XTPOINTER)(*(short*)toVal.addr);
+ 	    break;
+ 	case 4:
+-	    val = (XTPOINTER)(unsigned)(*(int*)toVal.addr);
++	    val = (XTPOINTER)(*(int*)toVal.addr);
+ 	    break;
+ 	case 8:
+ 	default:
+-	    val = (XTPOINTER)(unsigned)(*(long*)toVal.addr);
++	    val = (XTPOINTER)(*(long*)toVal.addr);
+ 	    break;
+ 	}
+     }
+@@ -2178,11 +2178,11 @@
+      * initialize return values
+      */
+     if (pixmap_return) {
+-        *pixmap_return = (Pixmap)NULL;
++        *pixmap_return = NULL;
+         imageptr = &image;
+     }
+     if (shapemask_return) {
+-        *shapemask_return = (Pixmap)NULL;
++        *shapemask_return = NULL;
+         shapeimageptr = &shapeimage;
+     }
+ 
+--- a/demos/programs/IconB/misc.c
++++ b/demos/programs/IconB/misc.c
+@@ -1384,17 +1384,17 @@
+ 	switch(toVal.size)
+ 	{
+ 	case 1:
+-	    val = (XTPOINTER)(unsigned)(*(char*)toVal.addr);
++	    val = (XTPOINTER)(*(char*)toVal.addr);
+ 	    break;
+ 	case 2:
+-	    val = (XTPOINTER)(unsigned)(*(short*)toVal.addr);
++	    val = (XTPOINTER)(*(short*)toVal.addr);
+ 	    break;
+ 	case 4:
+-	    val = (XTPOINTER)(unsigned)(*(int*)toVal.addr);
++	    val = (XTPOINTER)(*(int*)toVal.addr);
+ 	    break;
+ 	case 8:
+ 	default:
+-	    val = (XTPOINTER)(unsigned)(*(long*)toVal.addr);
++	    val = (XTPOINTER)(*(long*)toVal.addr);
+ 	    break;
+ 	}
+     }
+@@ -2150,11 +2150,11 @@
+      * initialize return values
+      */
+     if (pixmap_return) {
+-        *pixmap_return = (Pixmap)NULL;
++        *pixmap_return = NULL;
+         imageptr = &image;
+     }
+     if (shapemask_return) {
+-        *shapemask_return = (Pixmap)NULL;
++        *shapemask_return = NULL;
+         shapeimageptr = &shapeimage;
+     }
+ 
+--- a/demos/programs/Paned/paned.c
++++ b/demos/programs/Paned/paned.c
+@@ -180,7 +180,7 @@
+ {
+     Arg args[5];
+     Cardinal argcnt;
+-    Boolean val = (Boolean) (unsigned)client;
++    Boolean val = (Boolean) client;
+ 
+     if (!XmToggleButtonGetState(w))
+ 	return;
+@@ -201,7 +201,7 @@
+ {
+     Arg args[5];
+     Cardinal argcnt;
+-    unsigned char orient = (unsigned char) (unsigned)client;
++    unsigned char orient = (unsigned char) client;
+     
+     if (!XmToggleButtonGetState(w))
+ 	return;
+--- a/demos/programs/TabStack/bxutils.c
++++ b/demos/programs/TabStack/bxutils.c
+@@ -453,7 +453,7 @@
+     }
+ 
+     tmp = tbuf[lenToConvert];
+-    tbuf[lenToConvert] = (unsigned)NULL;
++    tbuf[lenToConvert] = NULL;
+     numCvt = doWcstombs(mbs, tbuf, lenToConvert);
+     tbuf[lenToConvert] = tmp;
+     
+@@ -1435,17 +1435,17 @@
+ 	switch(toVal.size)
+ 	{
+ 	case 1:
+-	    val = (XTPOINTER)(unsigned)(*(char*)toVal.addr);    /* may be here exists bug ! */
++	    val = (XTPOINTER)(*(char*)toVal.addr);
+ 	    break;
+ 	case 2:
+-	    val = (XTPOINTER)(unsigned)(*(short*)toVal.addr);   /* may be here exists bug ! */
++	    val = (XTPOINTER)(*(short*)toVal.addr);
+ 	    break;
+ 	case 4:
+-	    val = (XTPOINTER)(unsigned)(*(int*)toVal.addr);     /* may be here exists bug ! */
++	    val = (XTPOINTER)(*(int*)toVal.addr);
+ 	    break;
+ 	case 8:
+ 	default:
+-	    val = (XTPOINTER)(unsigned)(*(long*)toVal.addr);    /* may be here exists bug ! */
++	    val = (XTPOINTER)(*(long*)toVal.addr);
+ 	    break;
+ 	}
+     }
+@@ -2180,11 +2180,11 @@
+      * initialize return values
+      */
+     if (pixmap_return) {
+-        *pixmap_return = (Pixmap)NULL;
++        *pixmap_return = NULL;
+         imageptr = &image;
+     }
+     if (shapemask_return) {
+-        *shapemask_return = (Pixmap)NULL;
++        *shapemask_return = NULL;
+         shapeimageptr = &shapeimage;
+     }
+ 
+--- a/demos/programs/Tree/bxutil-c.c
++++ b/demos/programs/Tree/bxutil-c.c
+@@ -1412,17 +1412,17 @@
+ 	switch(toVal.size)
+ 	{
+ 	case 1:
+-	    val = (XTPOINTER)(unsigned)(*(char*)toVal.addr);    /* may be here bug */
++	    val = (XTPOINTER)(*(char*)toVal.addr);
+ 	    break;
+ 	case 2:
+-	    val = (XTPOINTER)(unsigned)(*(short*)toVal.addr);   /* may be here bug */
++	    val = (XTPOINTER)(*(short*)toVal.addr);
+ 	    break;
+ 	case 4:
+-	    val = (XTPOINTER)(unsigned)(*(int*)toVal.addr);     /* may be here bug */
++	    val = (XTPOINTER)(*(int*)toVal.addr);
+ 	    break;
+ 	case 8:
+ 	default:
+-	    val = (XTPOINTER)(unsigned)(*(long*)toVal.addr);    /* may be here bug */
++	    val = (XTPOINTER)(*(long*)toVal.addr);
+ 	    break;
+ 	}
+     }
+@@ -2178,11 +2178,11 @@
+      * initialize return values
+      */
+     if (pixmap_return) {
+-        *pixmap_return = (Pixmap)NULL;
++        *pixmap_return = NULL;
+         imageptr = &image;
+     }
+     if (shapemask_return) {
+-        *shapemask_return = (Pixmap)NULL;
++        *shapemask_return = NULL;
+         shapeimageptr = &shapeimage;
+     }
+ 

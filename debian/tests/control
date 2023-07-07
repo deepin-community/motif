@@ -1,0 +1,3 @@
+Tests: build-demos
+Depends: build-essential, byacc, debhelper (>=9), dh-autoreconf, flex (>=2.5.36), libfl-dev, libmotif-dev, libxext-dev
+Restrictions: allow-stderr, rw-build-tree

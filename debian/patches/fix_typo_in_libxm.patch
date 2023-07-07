@@ -1,0 +1,36 @@
+Description: lintian reports a typo in libXm. This patch fixes it.
+Author: Paul Gevers <elbrus@debian.org>
+Author: Graham Inggs <ginggs@debian.org>
+Forwarded: http://bugs.motifzone.net/show_bug.cgi?id=1589
+Last-update: 2017-08-03
+--- a/lib/Xm/FontS.c
++++ b/lib/Xm/FontS.c
+@@ -1225,7 +1225,7 @@
+ 
+     if ((fontdata = XLoadQueryFont(XtDisplay((Widget) fsw), font)) == NULL)
+     {
+-	sprintf(buf, "Font '%s'\nis not availiable on this machine", font);
++	sprintf(buf, "Font '%s'\nis not available on this machine", font);
+ 	DisplayUserError(fsw, buf);
+ 	err = True;
+     }
+@@ -1275,7 +1275,7 @@
+ 					   fbuf)) == NULL) 
+ 	    {
+ 		sprintf(buf,
+-			    "Font '%s'\nis not availiable on this machine",
++			    "Font '%s'\nis not available on this machine",
+ 			    font);
+ 		DisplayUserError(fsw, buf);
+ 		    err = True;
+--- a/lib/Xm/Messages.c
++++ b/lib/Xm/Messages.c
+@@ -630,7 +630,7 @@
+ /**************** Scale.c ****************/
+ 
+ externaldef(messages) _XmConst char *_XmMsgScale_0000 =
+-   "The minumum scale value is greater than or equal to the maximum scale \
++   "The minimum scale value is greater than or equal to the maximum scale \
+ value.";
+ 
+ externaldef(messages) _XmConst char *_XmMsgScale_0001 =

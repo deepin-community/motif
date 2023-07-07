@@ -1,0 +1,9 @@
+/usr/include/Mrm
+/usr/include/Xm
+/usr/include/uil
+/usr/lib/*/lib*.so
+/usr/lib/*/libMrm.a
+/usr/lib/*/libUil.a
+/usr/lib/*/libXm.a
+/usr/share/man/man3
+/usr/share/man/man5

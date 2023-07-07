@@ -1,0 +1,826 @@
+Description: Only build tools and demos
+ This patch modifies Makefiles so that only tools and demos are built
+ and that the installed includes and libs from libmotif-dev are used.
+Author: Graham Inggs <ginggs@debian.org>
+Forwarded: Not-needed
+Last-Update: 2017-08-03
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -20,14 +20,6 @@
+              missing mkinstalldirs \
+              compile
+ 
+-SUBDIRS	= bindings bitmaps \
+-             config \
+-             localized \
+-             lib \
+-             include \
+-             tools \
+-             clients \
+-             doc \
+-             demos
++SUBDIRS	= tools demos
+ AUTOMAKE_OPTIONS = 1.4
+ ACLOCAL_AMFLAGS = -I .
+--- a/demos/lib/Xmd/Makefile.am
++++ b/demos/lib/Xmd/Makefile.am
+@@ -12,9 +12,9 @@
+ Print.h PrintP.h \
+ RegEdit.h RegEditI.h
+ 
+-LDADD = libXmd.a ../../../lib/Xm/libXm.la -lXt
++LDADD = libXmd.a -lXm -lXt
+ 
+-INCLUDES = -I$(top_builddir)/lib -I$(srcdir)/../../../lib ${X_CFLAGS} 
++INCLUDES = ${X_CFLAGS}
+ 
+ EXTRA_DIST =
+ 
+--- a/demos/programs/airport/Makefile.am
++++ b/demos/programs/airport/Makefile.am
+@@ -8,5 +8,5 @@
+                   dragsource.h dropsite.h main.h
+ EXTRA_DIST = XmdAirport.ad README
+ data_DATA = $(airport_SOURCES) $(EXTRA_DIST)
+-LDADD = ../../../lib/Xm/libXm.la -lXt -lX11
+-INCLUDES = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++LDADD = -lXm -lXt -lX11
++INCLUDES = ${X_CFLAGS}
+--- a/demos/programs/animate/Makefile.am
++++ b/demos/programs/animate/Makefile.am
+@@ -17,26 +17,23 @@
+ 
+ bin_PROGRAMS = xmanimate
+ 
+-LDADD = ../../lib/Xmd/libXmd.a ../../../lib/Mrm/libMrm.la ../../../lib/Xm/libXm.la -lXt -lX11
++LDADD = -L$(top_builddir)/demos/lib/Xmd -lXmd -lMrm -lXm -lXt -lX11
+ 
+-INCLUDES = -I$(srcdir)/../../../lib \
+-           -I$(srcdir)/../../lib \
+-           -I$(top_builddir)/lib \
+-           ${X_CFLAGS} 
++INCLUDES = -I$(top_srcdir)/demos/lib ${X_CFLAGS}
+ 
+ all: dog.uid plane.uid superman.uid xmanimate.uid
+ 
+ dog.uid: dog.uil
+-	../../../clients/uil/uil -o $@ $? -I$(srcdir)/../../../clients/uil -I../../../clients/uil
++	uil -o $@ $?
+ 
+ plane.uid: plane.uil
+-	../../../clients/uil/uil -o $@ $? -I$(srcdir)/../../../clients/uil -I../../../clients/uil
++	uil -o $@ $?
+ 
+ superman.uid: superman.uil
+-	../../../clients/uil/uil -o $@ $? -I$(srcdir)/../../../clients/uil -I../../../clients/uil
++	uil -o $@ $?
+ 
+ xmanimate.uid: xmanimate.uil
+-	../../../clients/uil/uil -o $@ $? -I$(srcdir)/../../../clients/uil -I../../../clients/uil
++	uil -o $@ $?
+ 
+ clean-local:
+ 	$(RM) periodic.uid
+--- a/demos/programs/ButtonBox/Makefile.am
++++ b/demos/programs/ButtonBox/Makefile.am
+@@ -8,6 +8,6 @@
+ bboxdemo_SOURCES = bboxdemo.c
+ data_DATA = $(EXTRA_DIST) $(bboxdemo_SOURCES)
+ TOPDIR = ../../..
+-LDADD = $(TOPDIR)/lib/Xm/libXm.la -lXt
++LDADD = -lXm -lXt
+ 
+-INCLUDES = -I$(TOPDIR)/lib -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 
++INCLUDES = ${X_CFLAGS}
+--- a/demos/programs/ColorSel/Makefile.am
++++ b/demos/programs/ColorSel/Makefile.am
+@@ -7,6 +7,6 @@
+ colordemo_SOURCES = util-c.c colordemo.c
+ EXTRA_DIST =
+ data_DATA = $(colordemo_SOURCES) $(EXTRA_DIST)
+-LDADD = $(TOPDIR)/lib/Xm/libXm.la -lXt -lX11
++LDADD = -lXm -lXt -lX11
+ TOPDIR = ../../..
+-INCLUDES = -I$(TOPDIR)/lib -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 
++INCLUDES = ${X_CFLAGS}
+--- a/demos/programs/Column/Makefile.am
++++ b/demos/programs/Column/Makefile.am
+@@ -8,5 +8,5 @@
+ EXTRA_DIST = Column.ad
+ data_DATA = $(EXTRA_DIST) $(column_SOURCES)
+ TOPDIR = ../../..
+-LDADD = $(TOPDIR)/lib/Xm/libXm.la -lXt -lX11
+-INCLUDES = -I$(TOPDIR)/lib -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 
++LDADD = -lXm -lXt -lX11
++INCLUDES = ${X_CFLAGS}
+--- a/demos/programs/Combo2/Makefile.am
++++ b/demos/programs/Combo2/Makefile.am
+@@ -8,5 +8,5 @@
+ combo_SOURCES = combo.c
+ data_DATA = $(EXTRA_DIST) $(combo_SOURCES)
+ TOPDIR = ../../..
+-LDADD = $(TOPDIR)/lib/Xm/libXm.la -lXt
+-INCLUDES = -I$(TOPDIR)/lib -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 
++LDADD = -lXm -lXt
++INCLUDES = ${X_CFLAGS}
+--- a/demos/programs/Exm/app_in_c/Makefile.am
++++ b/demos/programs/Exm/app_in_c/Makefile.am
+@@ -9,9 +9,5 @@
+ 
+ EXTRA_DIST = exm_in_c.man
+ 
+-INCLUDES = -I$(srcdir)/../../../../lib \
+-           -I$(srcdir)/../../../lib \
+-           -I$(top_builddir)/lib \
+-            ${X_CFLAGS} 
+-LDADD = ../../../lib/Exm/libExm.a \
+-	../../../../lib/Xm/libXm.la -lXt -lXext -lX11
++INCLUDES = -I$(top_srcdir)/demos/lib ${X_CFLAGS}
++LDADD = -L$(top_builddir)/demos/lib/Exm -lExm -lXm -lXt -lXext -lX11
+--- a/demos/programs/Exm/app_in_uil/Makefile.am
++++ b/demos/programs/Exm/app_in_uil/Makefile.am
+@@ -7,15 +7,15 @@
+ #noinst_PROGRAMS = exm_in_uil
+ #exm_in_uil_DEPENDENCIES = exm_in_uil.uid
+ 
+-LDADD = -L../../../lib/Exm -lExmMrm -lExm  $(top_builddir)/lib/Mrm/libMrm.la
++LDADD = -L$(top_builddir)/demos/lib/Exm -lExmMrm -lExm  -lMrm
+ 
+ 
+-INCLUDES = -I$(top_srcdir)/lib -I$(top_srcdir)/lib -I../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++INCLUDES = -I$(top_srcdir)/demos/lib ${X_CFLAGS}
+ 
+ SUFFIXES = .uil .uid
+ 
+ .uil.uid:
+-	$(top_builddir)/clients/uil/uil -wmd ../../../lib/Exm/wml/Exm.wmd -I$(srcdir) -o $@ $<
++	uil -wmd $(top_srcdir)/demos/lib/Exm/wml/Exm.wmd -o $@ $<
+ 
+ #  EXMSRC        = ../../../lib/Exm
+ #  EXMINCLUDESRC	= $(MINCLUDESRC)
+--- a/demos/programs/Exm/simple_app/Makefile.am
++++ b/demos/programs/Exm/simple_app/Makefile.am
+@@ -10,10 +10,6 @@
+ 
+ EXTRA_DIST = simpleDemo.man README
+ 
+-INCLUDES = -I$(srcdir)/../../../../lib \
+-           -I$(srcdir)/../../../lib \
+-           -I$(top_builddir)/lib \
+-           ${X_CFLAGS} 
+-LDADD = ../../../lib/Exm/libExm.a \
+-        ../../../../lib/Xm/libXm.la -lXt -lX11
++INCLUDES = -I$(top_srcdir)/demos/lib ${X_CFLAGS}
+ 
++LDADD = -L$(top_builddir)/demos/lib/Exm -lExm -lXm -lXt -lX11
+--- a/demos/programs/Ext18List/Makefile.am
++++ b/demos/programs/Ext18List/Makefile.am
+@@ -10,6 +10,6 @@
+ EXTRA_DIST =
+ data_DATA = $(EXTRA_DIST) $(ext18list_SOURCES)
+ TOPDIR = ../../..
+-LDADD = $(TOPDIR)/lib/Xm/libXm.la -lXt -lX11
++LDADD = -lXm -lXt -lX11
+ 
+-INCLUDES = -I$(TOPDIR)/lib -I.. -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 
++INCLUDES = ${X_CFLAGS}
+--- a/demos/programs/FontSel/Makefile.am
++++ b/demos/programs/FontSel/Makefile.am
+@@ -7,6 +7,6 @@
+ fontsel_SOURCES = callbacks-c.c creation-c.c fontsel.c fontsel.h
+ EXTRA_DIST =
+ data_DATA = $(EXTRA_DIST) $(fontsel_SOURCES)
+-LDADD = $(TOPDIR)/lib/Xm/libXm.la -lXt
++LDADD = -lXm -lXt
+ TOPDIR = ../../..
+-INCLUDES = -I$(TOPDIR)/lib -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 
++INCLUDES = ${X_CFLAGS}
+--- a/demos/programs/IconB/Makefile.am
++++ b/demos/programs/IconB/Makefile.am
+@@ -8,8 +8,6 @@
+ iconbuttondemo_SOURCES = misc.c  iconbuttondemo.c
+ data_DATA = $(iconbuttondemo_SOURCES) $(EXTRA_DIST)
+ TOPDIR = ../../..
+-LDADD = $(TOPDIR)/lib/Xm/libXm.la -lXt -lX11
++LDADD = -lXm -lXt -lX11
+ 
+-INCLUDES = -I$(TOPDIR)/lib -I$(srcdir)/.. \
+-           -I$(srcdir)/$(TOPDIR)/lib \
+-           ${X_CFLAGS} 
++INCLUDES = -I$(top_srcdir)/demos/programs ${X_CFLAGS}
+--- a/demos/programs/Outline/Makefile.am
++++ b/demos/programs/Outline/Makefile.am
+@@ -7,6 +7,6 @@
+ bin_PROGRAMS = outline
+ outline_SOURCES = outline.c
+ data_DATA = $(outline_SOURCES) $(EXTRA_DIST)
+-LDADD = $(TOPDIR)/lib/Xm/libXm.la -lXt
++LDADD = -lXm -lXt
+ TOPDIR = ../../..
+-INCLUDES = -I$(TOPDIR)/lib -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 
++INCLUDES = ${X_CFLAGS}
+--- a/demos/programs/Paned/Makefile.am
++++ b/demos/programs/Paned/Makefile.am
+@@ -8,6 +8,6 @@
+ paned_SOURCES = creation-c.c paned.c
+ data_DATA = $(EXTRA_DIST) $(paned_SOURCES)
+ TOPDIR = ../../..
+-LDADD = $(TOPDIR)/lib/Xm/libXm.la -lXt
++LDADD = -lXm -lXt
+ 
+-INCLUDES = -I$(TOPDIR)/lib -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 
++INCLUDES = ${X_CFLAGS}
+--- a/demos/programs/TabStack/Makefile.am
++++ b/demos/programs/TabStack/Makefile.am
+@@ -8,6 +8,6 @@
+ EXTRA_DIST =
+ data_DATA = $(tabstack_SOURCES) $(EXTRA_DIST)            
+ TOPDIR = ../../..
+-LDADD = $(TOPDIR)/lib/Xm/libXm.la -lXt -lX11
++LDADD = -lXm -lXt -lX11
+ 
+-INCLUDES = -I$(TOPDIR)/lib -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 
++INCLUDES = ${X_CFLAGS}
+--- a/demos/programs/Tree/Makefile.am
++++ b/demos/programs/Tree/Makefile.am
+@@ -8,6 +8,6 @@
+ tree_SOURCES = bxutil-c.c  tree.c
+ data_DATA = $(EXTRA_DIST) $(tree_SOURCES)
+ TOPDIR = ../../..
+-LDADD = $(TOPDIR)/lib/Xm/libXm.la -lXt -lX11
++LDADD = -lXm -lXt -lX11
+ 
+-INCLUDES = -I$(TOPDIR)/lib -I$(srcdir)/.. -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 
++INCLUDES = -I$(top_srcdir)/demos/programs ${X_CFLAGS}
+--- a/demos/programs/drag_and_drop/Makefile.am
++++ b/demos/programs/drag_and_drop/Makefile.am
+@@ -10,6 +10,6 @@
+ simpledrop_SOURCES = simpledrop.c
+ data_DATA = $(EXTRA_DIST) $(DNDDemo_SOURCES) $(simpledrop_SOURCES)
+ noinst_HEADERS = DNDDemo.h
+-LDADD = ../../../lib/Xm/libXm.la -lXt -lX11
++LDADD = -lXm -lXt -lX11
+ 
+-INCLUDES = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++INCLUDES = ${X_CFLAGS}
+--- a/demos/programs/draw/Makefile.am
++++ b/demos/programs/draw/Makefile.am
+@@ -7,5 +7,5 @@
+ draw_SOURCES = draw.c
+ EXTRA_DIST = XmdDraw.ad README draw.help draw.man
+ data_DATA = $(EXTRA_DIST) $(draw_SOURCES)
+-LDADD = ../../lib/Xmd/libXmd.a ../../../lib/Xm/libXm.la -lXt -lX11
+-INCLUDES = -I$(srcdir)/../../lib -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++LDADD = -L$(top_builddir)/demos/lib/Xmd -lXmd -lXm -lXt -lX11
++INCLUDES = -I$(top_srcdir)/demos/lib ${X_CFLAGS}
+--- a/demos/programs/earth/Makefile.am
++++ b/demos/programs/earth/Makefile.am
+@@ -7,5 +7,5 @@
+ earth_SOURCES = earth.c
+ EXTRA_DIST = terre.xbm earth.man README
+ data_DATA = $(EXTRA_DIST) $(earth_SOURCES)
+-LDADD = ../../../lib/Xm/libXm.la -lXt -lXext -lX11
+-INCLUDES = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++LDADD = -lXm -lXt -lXext -lX11
++INCLUDES = ${X_CFLAGS}
+--- a/demos/programs/filemanager/Makefile.am
++++ b/demos/programs/filemanager/Makefile.am
+@@ -11,7 +11,7 @@
+            obj.xpm pix.xpm s_dir.xpm s_exec.xpm s_file.xpm \
+            s_none.xpm s_pix.xpm
+ data_DATA = $(EXTRA_DIST) $(filemanager_SOURCES)
+-LDADD = ../../lib/Xmd/libXmd.a ../../../lib/Xm/libXm.la -lXt -lX11
+-INCLUDES = -I$(srcdir)/../../lib -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++LDADD = -L$(top_builddir)/demos/lib/Xmd -lXmd -lXm -lXt -lX11
++INCLUDES = -I$(top_srcdir)/demos/lib ${X_CFLAGS}
+ 
+ 
+--- a/demos/programs/fileview/Makefile.am
++++ b/demos/programs/fileview/Makefile.am
+@@ -11,20 +11,20 @@
+ 
+ UILS= French.uil German.uil English.uil
+ 
+-LDADD = ../../../lib/Xm/libXm.la ../../../lib/Mrm/libMrm.la -lXt -lX11
++LDADD = -lXm -lMrm -lXt -lX11
+ 
+-INCLUDES = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++INCLUDES = ${X_CFLAGS}
+ 
+ all: French.uid German.uid English.uid
+ 
+ French.uid: French.uil
+-	../../../clients/uil/uil -o $@ $? -I$(srcdir)/../../../clients/uil -I../../../clients/uil
++	uil -o $@ $?
+ 
+ German.uid: German.uil
+-	../../../clients/uil/uil -o $@ $? -I$(srcdir)/../../../clients/uil -I../../../clients/uil
++	uil -o $@ $?
+ 
+ English.uid: English.uil
+-	../../../clients/uil/uil -o $@ $? -I$(srcdir)/../../../clients/uil -I../../../clients/uil
++	uil -o $@ $?
+ 
+ clean-local:
+ 	$(RM) French.uid German.uid English.uid
+--- a/demos/programs/getsubres/Makefile.am
++++ b/demos/programs/getsubres/Makefile.am
+@@ -7,5 +7,5 @@
+ EXTRA_DIST = getsubres.help getsubres.man README
+ getsubres_SOURCES = getsubres.c
+ data_DATA = $(EXTRA_DIST) $(getsubres_SOURCES)
+-LDADD = ../../lib/Xmd/libXmd.a ../../../lib/Xm/libXm.la -lXt -lX11
+-INCLUDES = -I$(srcdir)/../../lib -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++LDADD = -L$(top_builddir)/demos/lib/Xmd -lXmd -lXm -lXt -lX11
++INCLUDES = -I$(top_srcdir)/demos/lib ${X_CFLAGS}
+--- a/demos/programs/hellomotif/Makefile.am
++++ b/demos/programs/hellomotif/Makefile.am
+@@ -7,13 +7,13 @@
+ EXTRA_DIST = hellomotif.uil README
+ hellomotif_SOURCES = hellomotif.c
+ data_DATA = $(EXTRA_DIST) $(hellomotif_SOURCES) hellomotif.uid
+-LDADD = ../../../lib/Xm/libXm.la ../../../lib/Mrm/libMrm.la -lXt
+-INCLUDES = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++LDADD = -lXm -lMrm -lXt
++INCLUDES = ${X_CFLAGS}
+ 
+ all: hellomotif.uid
+ 
+ hellomotif.uid: hellomotif.uil
+-	../../../clients/uil/uil -o $@ $? -I$(srcdir)/../../../clients/uil -I../../../clients/uil
++	uil -o $@ $?
+ 
+ clean-local:
+ 	$(RM) hellomotif.uid
+--- a/demos/programs/hellomotifi18n/Makefile.am
++++ b/demos/programs/hellomotifi18n/Makefile.am
+@@ -11,10 +11,10 @@
+ data_DATA = $(EXTRA_DIST) $(helloint_SOURCES) helloint.uid
+ helloint_DEPENDENCIES = helloint.uid C/uid/l_strings.uid english/uid/l_strings.uid french/uid/l_strings.uid hebrew/uid/l_strings.uid japan/uid/l_strings.uid japanese/uid/l_strings.uid swedish/uid/l_strings.uid
+ 
+-INCLUDES = -I$(top_srcdir)/lib -I$(top_builddir)/lib ${X_CFLAGS} 
+-LDADD = $(top_builddir)/lib/Mrm/libMrm.la $(top_builddir)/lib/Xm/libXm.la -lXt
++INCLUDES = ${X_CFLAGS}
++LDADD = -lMrm -lXm -lXt
+ 
+ SUFFIXES = .uil .uid
+ 
+ .uil.uid:
+-	$(top_builddir)/clients/uil/uil $< -I$(srcdir) -o $@
++	uil $< -I$(srcdir) -o $@
+--- a/demos/programs/i18ninput/Makefile.am
++++ b/demos/programs/i18ninput/Makefile.am
+@@ -7,6 +7,6 @@
+ i18ninput_SOURCES = i18ninput.c input.c 
+ EXTRA_DIST = XmdI18nInput.ad README i18ninput.man i18ninput.help
+ data_DATA = $(EXTRA_DIST) $(i18ninput_SOURCES)
+-LDADD = ../../lib/Xmd/libXmd.a ../../../lib/Xm/libXm.la -lXt -lX11
++LDADD = -L$(top_builddir)/demos/lib/Xmd -lXmd -lXm -lXt -lX11
+ 
+-INCLUDES = -I$(srcdir)/../../lib -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++INCLUDES = -I$(top_srcdir)/demos/lib ${X_CFLAGS}
+--- a/demos/programs/panner/Makefile.am
++++ b/demos/programs/panner/Makefile.am
+@@ -7,5 +7,5 @@
+ panner_SOURCES = panner.c
+ EXTRA_DIST = README panner.man
+ data_DATA = $(EXTRA_DIST) $(panner_SOURCES)
+-LDADD = ../../../lib/Xm/libXm.la -lXt -lX11
+-INCLUDES = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++LDADD = -lXm -lXt -lX11
++INCLUDES = ${X_CFLAGS}
+--- a/demos/programs/periodic/Makefile.am
++++ b/demos/programs/periodic/Makefile.am
+@@ -7,14 +7,14 @@
+ EXTRA_DIST = periodic.uil periodic_l.uil XmdPeriodic.ad README
+ periodic_SOURCES = periodic.c
+ data_DATA = $(EXTRA_DIST) $(periodic_SOURCES) periodic.uid
+-LDADD = ../../../lib/Xm/libXm.la ../../../lib/Mrm/libMrm.la -lXt -lX11
++LDADD = -lXm -lMrm -lXt -lX11
+ 
+-INCLUDES = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++INCLUDES = ${X_CFLAGS}
+ 
+ all: periodic.uid
+ 
+ periodic.uid: periodic.uil
+-	../../../clients/uil/uil -o $@ $? -I$(srcdir)/../../../clients/uil -I../../../clients/uil
++	uil -o $@ $?
+ 
+ clean-local:
+ 	$(RM) periodic.uid
+--- a/demos/programs/piano/Makefile.am
++++ b/demos/programs/piano/Makefile.am
+@@ -8,6 +8,6 @@
+ EXTRA_DIST = piano.images README Inv8_part1.piano Inv8_part2.piano \
+              piano.man
+ data_DATA  = $(EXTRA_DIST) $(piano_SOURCES) 
+-LDADD = ../../../lib/Xm/libXm.la -lm -lXt -lX11
++LDADD = -lXm -lm -lXt -lX11
+ 
+-INCLUDES = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++INCLUDES = ${X_CFLAGS}
+--- a/demos/programs/popups/Makefile.am
++++ b/demos/programs/popups/Makefile.am
+@@ -7,6 +7,6 @@
+ autopopups_SOURCES = autopopups.c
+ EXTRA_DIST = README autopopups.man
+ data_DATA = $(EXTRA_DIST) $(autopopups_SOURCES)
+-LDADD = ../../../lib/Xm/libXm.la -lXt -lX11
++LDADD = -lXm -lXt -lX11
+ 
+-INCLUDES = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++INCLUDES = ${X_CFLAGS}
+--- a/demos/programs/sampler2_0/Makefile.am
++++ b/demos/programs/sampler2_0/Makefile.am
+@@ -10,6 +10,6 @@
+ bin_PROGRAMS = sampler2_0
+ sampler2_0_SOURCES = sampler2_0.c
+ data_DATA = $(sampler2_0_SOURCES) $(EXTRA_DIST)
+-LDADD = ../../lib/Xmd/libXmd.a ../../../lib/Xm/libXm.la -lXt -lX11
++LDADD = -L$(top_builddir)/demos/lib/Xmd -lXmd -lXm -lXt -lX11
+ 
+-INCLUDES = -I$(srcdir)/../../lib -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++INCLUDES = -I$(top_srcdir)/demos/lib ${X_CFLAGS}
+--- a/demos/programs/setdate/Makefile.am
++++ b/demos/programs/setdate/Makefile.am
+@@ -7,6 +7,6 @@
+ EXTRA_DIST = XmdSetDate.ad README setDate.man
+ setDate_SOURCES = setDate.c
+ data_DATA = $(EXTRA_DIST) $(setDate_SOURCES)
+-LDADD = ../../../lib/Xm/libXm.la -lXt -lX11
++LDADD = -lXm -lXt -lX11
+ 
+-INCLUDES = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++INCLUDES = ${X_CFLAGS}
+--- a/demos/programs/todo/Makefile.am
++++ b/demos/programs/todo/Makefile.am
+@@ -8,5 +8,5 @@
+ todo_SOURCES = todo.c io.c actions.c page.h
+ data_DATA = $(EXTRA_DIST) $(todo_SOURCES)
+ 
+-INCLUDES = -I$(srcdir)/../../../lib -I$(srcdir)/../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
+-LDADD = -L../../lib/Xmd -lXmd -L../../lib/Exm -lExm ../../../lib/Xm/libXm.la -lXt -lXext -lX11
++INCLUDES = -I$(top_srcdir)/demos/lib ${X_CFLAGS}
++LDADD = -L$(top_builddir)/demos/lib/Xmd -lXmd -L$(top_builddir)/demos/lib/Exm -lExm -lXm -lXt -lXext -lX11
+--- a/demos/programs/tooltips/Makefile.am
++++ b/demos/programs/tooltips/Makefile.am
+@@ -7,6 +7,6 @@
+ bin_PROGRAMS = tooltips
+ tooltips_SOURCES = tooltips.c
+ data_DATA = $(tooltips_SOURCES) $(EXTRA_DIST)
+-LDADD = ../../../lib/Xm/libXm.la -lXt
++LDADD = -lXm -lXt
+ 
+-INCLUDES = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++INCLUDES = ${X_CFLAGS}
+--- a/demos/programs/workspace/Makefile.am
++++ b/demos/programs/workspace/Makefile.am
+@@ -10,5 +10,5 @@
+               command_ui.h wsm_cb.h wsm_create.h wsmData.h wsmDebug.h \
+               wsm.h wsmSend.h wsmStruct.h wsm_ui.h xrmLib.h
+ data_DATA = $(wsm_SOURCES) $(EXTRA_DIST)
+-INCLUDES = -I$(srcdir)/../../../lib -I$(srcdir)/../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
+-LDADD = ../../../lib/Xm/libXm.la -L../../lib/Wsm -lWsm -lXt -lX11
++INCLUDES = -I$(top_srcdir)/demos/lib ${X_CFLAGS}
++LDADD = -lXm -L$(top_builddir)/demos/lib/Wsm -lWsm -lXt -lX11
+--- a/demos/lib/Exm/wml/Makefile.am
++++ b/demos/lib/Exm/wml/Makefile.am
+@@ -9,16 +9,9 @@
+ 
+ WMLDIR = $(top_srcdir)/tools/wml
+ 
+-INCLUDES = -I$(top_srcdir)/lib \
+-        -I$(top_builddir)/lib \
+-	-I$(top_srcdir)/include \
+-	-I$(srcdir)/../.. \
+-	-I$(top_srcdir)/tools/wml \
+-	-I$(top_builddir)/tools/wml \
+-	-I$(top_builddir)/clients/uil \
+-	${X_CFLAGS} 
++INCLUDES = -I$(top_srcdir)/demos/lib -I$(top_srcdir)/tools/wml ${X_CFLAGS}
+ 
+-LDADD = $(top_builddir)/lib/Xm/libXm.la -lXt
++LDADD = -lXm -lXt
+ 
+ DISTCLEANFILES = motif.wmd
+ 
+--- a/demos/unsupported/dogs/Makefile.am
++++ b/demos/unsupported/dogs/Makefile.am
+@@ -15,13 +15,13 @@
+ 
+ dogs_DEPENDENCIES = dogs.uid
+ 
+-LDADD = $(top_builddir)/lib/Mrm/libMrm.la $(top_builddir)/lib/Xm/libXm.la -lXt -lX11
++LDADD = -lMrm -lXm -lXt -lX11
+ 
+-INCLUDES = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++INCLUDES = ${X_CFLAGS}
+ 
+ SUFFIXES = .uil .uid
+ 
+ .uil.uid:
+-	../../../clients/uil/uil $< -I$(srcdir) -o $@
++	uil $< -o $@
+ 
+ 
+--- a/demos/unsupported/dainput/Makefile.am
++++ b/demos/unsupported/dainput/Makefile.am
+@@ -4,10 +4,10 @@
+ 
+ dainput_SOURCES = dainput.c dainput_dlg.c dainput_ui.c
+ 
+-LDADD = ../../../lib/Xm/libXm.la -lXt -lX11
++LDADD = -lXm -lXt -lX11
+ 
+ EXTRA_DIST =
+ 
+-INCLUDES = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++INCLUDES = ${X_CFLAGS}
+ 
+ noinst_HEADERS = dainput.h
+--- a/demos/unsupported/aicon/Makefile.am
++++ b/demos/unsupported/aicon/Makefile.am
+@@ -2,8 +2,8 @@
+ 
+ noinst_PROGRAMS = aicon
+  
+-LDADD = -L../../lib/Xmd -lXmd ../../../lib/Xm/libXm.la -lXt -lX11
++LDADD = -L$(top_builddir)/demos/lib/Xmd -lXmd -lXm -lXt -lX11
+ 
+-INCLUDES = -I$(srcdir)/../../../lib -I$(srcdir)/../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++INCLUDES = -I$(top_srcdir)/demos/lib ${X_CFLAGS}
+ 
+ EXTRA_DIST =
+--- a/demos/unsupported/hellomotif/Makefile.am
++++ b/demos/unsupported/hellomotif/Makefile.am
+@@ -4,8 +4,8 @@
+ 
+ SOURCES = hellomotif.c
+ 
+-LDADD = ../../../lib/Xm/libXm.la -lXt
++LDADD = -lXm -lXt
+ 
+ EXTRA_DIST =
+ 
+-INCLUDES = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++INCLUDES = ${X_CFLAGS}
+--- a/demos/unsupported/motifshell/Makefile.am
++++ b/demos/unsupported/motifshell/Makefile.am
+@@ -4,8 +4,8 @@
+ 
+ SOURCES = motifshell.c
+ 
+-LDADD = ../../../lib/Xm/libXm.la -lXt -lX11
++LDADD = -lXm -lXt -lX11
+ 
+ EXTRA_DIST =
+ 
+-INCLUDES = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++INCLUDES = ${X_CFLAGS}
+--- a/demos/unsupported/uilsymdump/Makefile.am
++++ b/demos/unsupported/uilsymdump/Makefile.am
+@@ -2,8 +2,8 @@
+ 
+ noinst_PROGRAMS = uilsymdump
+ 
+-INCLUDES = -I$(srcdir)/../../../clients -I$(srcdir)/../../../lib -I../../../clients -I$(top_builddir)/lib ${X_CFLAGS} 
++INCLUDES = ${X_CFLAGS}
+ 
+ EXTRA_DIST =
+ 
+-LDADD = ../../../clients/uil/libUil.la
++LDADD = -lUil
+--- a/demos/unsupported/xmapdef/Makefile.am
++++ b/demos/unsupported/xmapdef/Makefile.am
+@@ -4,8 +4,8 @@
+ 
+ SOURCES = xmapdef.c
+ 
+-LDADD = ../../../lib/Xm/libXm.la -lXt -lX11
++LDADD = -lXm -lXt -lX11
+ 
+ EXTRA_DIST =
+ 
+-INCLUDES = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++INCLUDES = ${X_CFLAGS}
+--- a/demos/unsupported/xmfonts/Makefile.am
++++ b/demos/unsupported/xmfonts/Makefile.am
+@@ -4,8 +4,8 @@
+ 
+ SOURCES = xmfonts.c
+ 
+-LDADD = ../../../lib/Xm/libXm.la -lXt -lX11
++LDADD = -lXm -lXt -lX11
+ 
+ EXTRA_DIST =
+ 
+-INCLUDES = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++INCLUDES = ${X_CFLAGS}
+--- a/demos/unsupported/xmforc/Makefile.am
++++ b/demos/unsupported/xmforc/Makefile.am
+@@ -4,8 +4,8 @@
+ 
+ SOURCES = xmforc.c
+ 
+-LDADD = ../../../lib/Xm/libXm.la -lXt
++LDADD = -lXm -lXt
+ 
+ EXTRA_DIST =
+ 
+-INCLUDES = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++INCLUDES = ${X_CFLAGS}
+--- a/demos/unsupported/xmform/Makefile.am
++++ b/demos/unsupported/xmform/Makefile.am
+@@ -6,6 +6,6 @@
+ 
+ EXTRA_DIST =
+ 
+-LDADD = ../../../lib/Xm/libXm.la -lXt
++LDADD = -lXm -lXt
+ 
+-INCLUDES = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS}
++INCLUDES = ${X_CFLAGS}
+--- a/demos/doc/programGuide/ch05/Scale/Makefile.am
++++ b/demos/doc/programGuide/ch05/Scale/Makefile.am
+@@ -6,6 +6,6 @@
+ 
+ tic_mark_SOURCES = tic_mark.c interface.c
+ 
+-INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib -I$(top_srcdir)/demos/lib $(X_CFLAGS)
++INCLUDES = -I$(top_srcdir)/demos/lib $(X_CFLAGS)
+ 
+-LDADD = -L$(top_builddir)/demos/lib/Xmd -lXmd $(top_builddir)/lib/Xm/libXm.la -lXt -lX11
++LDADD = -L$(top_builddir)/demos/lib/Xmd -lXmd -lXm -lXt -lX11
+--- a/demos/doc/programGuide/ch06/combo_box/Makefile.am
++++ b/demos/doc/programGuide/ch06/combo_box/Makefile.am
+@@ -7,6 +7,6 @@
+ combo_box_SOURCES = combo_box.c interface.c
+ 
+ 
+-INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib -I$(top_srcdir)/demos/lib $(X_CFLAGS)
++INCLUDES = -I$(top_srcdir)/demos/lib $(X_CFLAGS)
+ 
+-LDADD = -L$(top_builddir)/demos/lib/Xmd -lXmd $(top_builddir)/lib/Xm/libXm.la -lXt -lX11
++LDADD = -L$(top_builddir)/demos/lib/Xmd -lXmd -lXm -lXt -lX11
+--- a/demos/doc/programGuide/ch06/spin_box/Makefile.am
++++ b/demos/doc/programGuide/ch06/spin_box/Makefile.am
+@@ -7,6 +7,6 @@
+ spin_box_SOURCES = spin_box.c interface.c
+ 
+ 
+-INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib -I$(top_srcdir)/demos/lib $(X_CFLAGS)
++INCLUDES = -I$(top_srcdir)/demos/lib $(X_CFLAGS)
+ 
+-LDADD = -L$(top_builddir)/demos/lib/Xmd -lXmd $(top_builddir)/lib/Xm/libXm.la -lXt -lX11
++LDADD = -L$(top_builddir)/demos/lib/Xmd -lXmd -lXm -lXt -lX11
+--- a/demos/doc/programGuide/ch08/Container/Makefile.am
++++ b/demos/doc/programGuide/ch08/Container/Makefile.am
+@@ -6,6 +6,6 @@
+ 
+ container_SOURCES = container.c  interface.c
+ 
+-INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib -I$(top_srcdir)/demos/lib $(X_CFLAGS)
++INCLUDES = -I$(top_srcdir)/demos/lib $(X_CFLAGS)
+ 
+-LDADD = -L$(top_builddir)/demos/lib/Xmd -lXmd $(top_builddir)/lib/Xm/libXm.la -lXt -lX11
++LDADD = -L$(top_builddir)/demos/lib/Xmd -lXmd -lXm -lXt -lX11
+--- a/demos/doc/programGuide/ch08/Notebook/Makefile.am
++++ b/demos/doc/programGuide/ch08/Notebook/Makefile.am
+@@ -6,6 +6,6 @@
+ 
+ notebook_SOURCES = interface.c  notebook.c
+ 
+-INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib -I$(top_srcdir)/demos/lib $(X_CFLAGS)
++INCLUDES = -I$(top_srcdir)/demos/lib $(X_CFLAGS)
+ 
+-LDADD = -L$(top_builddir)/demos/lib/Xmd -lXmd $(top_builddir)/lib/Xm/libXm.la -lXt -lX11
++LDADD = -L$(top_builddir)/demos/lib/Xmd -lXmd -lXm -lXt -lX11
+--- a/demos/doc/programGuide/ch16/Makefile.am
++++ b/demos/doc/programGuide/ch16/Makefile.am
+@@ -7,6 +7,6 @@
+ UTMXmText_SOURCES = UTMXmText.c
+ 
+ 
+-INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib -I$(top_srcdir)/demos/lib $(X_CFLAGS)
++INCLUDES = -I$(top_srcdir)/demos/lib $(X_CFLAGS)
+ 
+-LDADD = -L$(top_builddir)/demos/lib/Xmd -lXmd $(top_builddir)/lib/Xm/libXm.la -lXt -lX11
++LDADD = -L$(top_builddir)/demos/lib/Xmd -lXmd -lXm -lXt -lX11
+--- a/demos/doc/programGuide/ch17/simple_drag/Makefile.am
++++ b/demos/doc/programGuide/ch17/simple_drag/Makefile.am
+@@ -7,6 +7,6 @@
+ simple_drag_SOURCES = simple_drag.c 
+ 
+ 
+-INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib -I$(top_srcdir)/demos/lib $(X_CFLAGS)
++INCLUDES = -I$(top_srcdir)/demos/lib $(X_CFLAGS)
+ 
+-LDADD = -L$(top_builddir)/demos/lib/Xmd -lXmd $(top_builddir)/lib/Xm/libXm.la -lXt -lX11
++LDADD = -L$(top_builddir)/demos/lib/Xmd -lXmd -lXm -lXt -lX11
+--- a/demos/doc/programGuide/ch17/simple_drop/Makefile.am
++++ b/demos/doc/programGuide/ch17/simple_drop/Makefile.am
+@@ -7,6 +7,6 @@
+ simple_drop_SOURCES = simple_drop.c 
+ 
+ 
+-INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib -I$(top_srcdir)/demos/lib $(X_CFLAGS)
++INCLUDES = -I$(top_srcdir)/demos/lib $(X_CFLAGS)
+ 
+-LDADD = -L$(top_builddir)/demos/lib/Xmd -lXmd $(top_builddir)/lib/Xm/libXm.la -lXt -lX11
++LDADD = -L$(top_builddir)/demos/lib/Xmd -lXmd -lXm -lXt -lX11
+--- a/tools/wml/Makefile.am
++++ b/tools/wml/Makefile.am
+@@ -30,7 +30,7 @@
+ wml_LDADD = -L. -lwml
+ wml_DEPENDENCIES = libwml.a
+ 
+-wmldbcreate_LDADD = ../../lib/Xm/libXm.la -lXt
++wmldbcreate_LDADD = -lXm -lXt
+ 
+ INCLUDES = -I../../lib -I$(srcdir)/../../lib -I$(srcdir)/../../include ${X_CFLAGS} 
+ 
+--- a/demos/lib/Exm/Makefile.am
++++ b/demos/lib/Exm/Makefile.am
+@@ -4,7 +4,7 @@
+ 
+ noinst_LIBRARIES = libExm.a libExmMrm.a
+ 
+-INCLUDES = -I$(srcdir)/../../../lib -I$(srcdir)/.. -I$(top_builddir)/lib ${X_CFLAGS} 
++INCLUDES = -I$(top_srcdir)/demos/lib ${X_CFLAGS}
+ 
+ CLEANFILES = Grid.E
+    
+--- a/demos/lib/Wsm/Makefile.am
++++ b/demos/lib/Wsm/Makefile.am
+@@ -6,4 +6,4 @@
+ 
+ noinst_HEADERS = wsm_funcs.h wsm_proto.h utm_send.h
+ 
+-INCLUDES = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++INCLUDES = ${X_CFLAGS}
+--- a/demos/unsupported/Exm/Makefile.am
++++ b/demos/unsupported/Exm/Makefile.am
+@@ -7,4 +7,4 @@
+ 
+ EXTRA_DIST =
+ 
+-INCLUDES = -I$(srcdir)/../../../lib -I$(srcdir)/.. -I$(srcdir)/../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
++INCLUDES = -I$(top_srcdir)/demos/lib -I$(top_srcdir)/demos/unsupported ${X_CFLAGS}
+--- a/demos/lib/Exm/wml/wmldbcreate.c
++++ b/demos/lib/Exm/wml/wmldbcreate.c
+@@ -33,7 +33,7 @@
+ 
+ #include <stdio.h>
+ 
+-#include <Mrm/MrmWidget.h>
++#include "MrmWidget.h"
+ #include <Xm/Xm.h> 
+ #include <Xm/MwmUtil.h>
+ 
+--- a/tools/wml/wmldbcreate.c
++++ b/tools/wml/wmldbcreate.c
+@@ -40,7 +40,7 @@
+ #include <stdlib.h>
+ #endif
+ 
+-#include <Mrm/MrmWidget.h> 
++#include "MrmWidget.h"
+ #include <Xm/Xm.h> 
+ #include <Xm/MwmUtil.h>
+ 
+--- a/configure.ac
++++ b/configure.ac
+@@ -30,7 +30,7 @@
+ dnl
+ dnl AC_DISABLE_STATIC
+ 
+-AC_CONFIG_HEADERS(include/config.h lib/Xm/Xm.h)
++AC_CONFIG_HEADERS(include/config.h)
+ 
+ dnl Checks for programs.
+ AC_PROG_CC
+--- a/demos/lib/Exm/MenuB.c
++++ b/demos/lib/Exm/MenuB.c
+@@ -61,7 +61,7 @@
+ #include <Xm/TraitP.h>
+ #include <Xm/MenuT.h>
+ #include <Xm/SpecRenderT.h> /* header file for XmBUTTON_RENDER_TABLE */
+-#include <Xm/UniqueEvnI.h>
++#include "UniqueEvnI.h"
+ #include <X11/keysymdef.h>
+ #include <Exm/MenuBP.h>
+ 
+--- a/demos/unsupported/Exm/Container.c
++++ b/demos/unsupported/Exm/Container.c
+@@ -49,8 +49,8 @@
+ #include <Xm/DrawingA.h>   
+ #include <Xm/IconH.h>   
+ #include <Xm/ScrollFrameT.h>
+-#include <Xm/XmI.h>
+-#include <Xm/XmTabListI.h>
++#include "XmI.h"
++#include "XmTabListI.h"
+ #include <Exm/ContainerP.h>
+ 
+ /* This one should be somewhere common */

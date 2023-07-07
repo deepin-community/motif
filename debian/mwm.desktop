@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Motif Window Manager
+Comment=Motif Window Manager session
+Exec=mwm
+TryExec=mwm
+Icon=
+Type=Application

@@ -1,0 +1,6 @@
+# Surely these lintian warnings about errors in man pages should be fixed.
+# The reason for the following overrides is just to make sure that the pure
+# number of these man page problems might hide any other more relevant
+# problem in the package and thus they are overriden for the moment.
+# Andreas Tille <tille@debian.org>
+libmotif-dev: manpage-has-errors-from-man

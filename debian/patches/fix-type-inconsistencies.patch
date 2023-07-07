@@ -1,0 +1,60 @@
+Description: Fix type inconsistencies
+ This patch fixes various type inconsistencies reported by goto-cc
+ from the cbmc package.
+Author: Graham Inggs <ginggs@debian.org>
+Forwarded: http://bugs.motifzone.net/show_bug.cgi?id=1641
+Bug-Debian: http://bugs.debian.org/749417
+Last-Update: 2017-08-04
+--- a/lib/Xm/EditresComI.h
++++ b/lib/Xm/EditresComI.h
+@@ -8,7 +8,7 @@
+ extern "C" {
+ #endif
+ 
+-void _XmEditResCheckMessages(Widget w, XtPointer data, XEvent event, Boolean cont);
++void _XmEditResCheckMessages(Widget w, XtPointer data, XEvent *event, Boolean *cont);
+ 
+ #ifdef __cplusplus
+ }  /* Close scope of 'extern "C"' declaration which encloses file. */
+--- a/lib/Xm/DataFSel.c
++++ b/lib/Xm/DataFSel.c
+@@ -86,7 +86,7 @@
+ #define WIDE_PROTOTYPE		Boolean
+ #endif
+ 
+-extern void _XmDataFieldDeselectSelection(Widget, int, WIDE_PROTOTYPE, Time);
++extern void _XmDataFieldDeselectSelection(Widget, WIDE_PROTOTYPE, Time);
+ extern void _XmDataFieldStartSelection(XmDataFieldWidget, XmTextPosition,
+ 				       XmTextPosition, Time);
+ extern int _XmDataFieldCountBytes(XmDataFieldWidget, wchar_t *, int);
+@@ -790,7 +790,7 @@
+ /* Losing Primary Selection */
+     if (*selection == XA_PRIMARY && XmTextF_has_primary(tf)) {
+         XmAnyCallbackStruct cb;
+-        _XmDataFieldDeselectSelection(w, False, 0, 
++        _XmDataFieldDeselectSelection(w, False,
+ 				      XtLastTimestampProcessed(XtDisplay(w)));
+ 
+         cb.reason = XmCR_LOSE_PRIMARY;
+--- a/lib/Xm/TabStack.c
++++ b/lib/Xm/TabStack.c
+@@ -71,7 +71,7 @@
+ extern int _XmTabBoxGetMaxTabHeight _ARGS((Widget));
+ extern void _XmTabBoxSelectTab _ARGS((Widget, int));
+ extern void _XmTabBoxGetNumRowsColumns _ARGS((Widget, int, int *, int *));
+-extern void _XmTabBoxStackedGeometry _ARGS((Widget, int, XRectangle *));
++extern void _XmTabBoxStackedGeometry _ARGS((XmTabBoxWidget, Dimension, XRectangle *));
+ extern int _XmTabbedStackListCount _ARGS((XmTabbedStackList));
+ 
+ #ifndef _NO_PROTO
+--- a/demos/lib/Xmd/RegEdit.c
++++ b/demos/lib/Xmd/RegEdit.c
+@@ -252,7 +252,7 @@
+      */
+ 
+     if (length < HEADER_SIZE) {
+-	SendFailure(w, sel, ident, Failure, ERROR_MESSAGE);
++	SendFailure(w, sel, ident, ERROR_MESSAGE);
+ 	return(NULL);
+     }
+ 

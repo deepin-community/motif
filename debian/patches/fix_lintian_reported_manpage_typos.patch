@@ -1,0 +1,328 @@
+Description: lintian reports several typos in manpages. This patch fixes those
+ reported
+Author: Paul Gevers <elbrus@debian.org>
+Author: Graham Inggs <ginggs@debian.org>
+Forwarded: http://bugs.motifzone.net/show_bug.cgi?id=1587
+Last-update: 2020-07-02
+
+--- a/doc/man/man1/mwm.1
++++ b/doc/man/man1/mwm.1
+@@ -359,7 +359,7 @@
+ (and other associated messages) by saving the geometries of its clients to a state file\&. 
+ \fBmwm\fP can then be restarted by the XSMP session manager\&.
+ The default location for the state file is \fB$HOME/\&.mwmclientdb\fP\&.
+-This location can be overriden with the resource \fBsessionClientDB\fP\&.
++This location can be overridden with the resource \fBsessionClientDB\fP\&.
+ .SS "X Resources"
+ .PP
+ The \fBmwm\fP command is configured from its resource
+--- a/doc/man/man3/VendorShell.3
++++ b/doc/man/man3/VendorShell.3
+@@ -76,7 +76,7 @@
+ to the VendorShell resources for controlling toolTips. VendorShell displays
+ the XmNtooTipString in an XmLabel that is a child of a transientShell. The name
+ of the transientShell is TipShell, and the name of the XmLabel is TipLabel.
+-The appearance of the tip can be controlled by specifing resources on these
++The appearance of the tip can be controlled by specifying resources on these
+ widgets.
+ .PP
+ If an application uses the \fBXmNmwmDecorations\fP,
+--- a/doc/man/man3/XmComboBox.3
++++ b/doc/man/man3/XmComboBox.3
+@@ -581,7 +581,7 @@
+ ComboBox \fBXmNcomboBoxType\fP is
+ \fBXmDROP_DOWN_LIST\fP,
+ \fB<osfActivate>\fP, \fB<osfCancel>\fP, and
+-\fBReturn\fP are overriden by ComboBox actions\&.
++\fBReturn\fP are overridden by ComboBox actions\&.
+ .IP "\fB:c\fP <Key>\fB<osfDown>\fP:" 10
+ CBDropDownList()
+ .IP "\fB:c\fP <Key>\fB<osfUp>\fP:" 10
+--- a/doc/man/man3/XmGetPixmap.3
++++ b/doc/man/man3/XmGetPixmap.3
+@@ -109,7 +109,7 @@
+ In addition to X bitmap files (XBM), Motif also supports XPM (X
+ Pixmap) file formats and, from version 2.3, JPEG and PNG image formats\&.
+ (Note that support of JPEG and PNG image format is an optional feature
+-of Motif, in order to check if current version supports PNG ang JPEG
++of Motif, in order to check if current version supports PNG and JPEG
+ image formats the PNG_SUPPORT and JPEG_SUPPORT macros should be checked
+ correspondingly.)
+ The \fBXBMLANGPATH\fP specifies the path for
+--- a/doc/man/man3/XmGetPixmapByDepth.3
++++ b/doc/man/man3/XmGetPixmapByDepth.3
+@@ -111,7 +111,7 @@
+ In addition to X bitmap files (XBM), Motif also supports XPM (X
+ Pixmap) file formats, and, from version 2.3, JPEG and PNG image formats\&.
+ (Note that support of JPEG and PNG image format is an optional feature
+-of Motif, in order to check if current version supports PNG ang JPEG
++of Motif, in order to check if current version supports PNG and JPEG
+ image formats the PNG_SUPPORT and JPEG_SUPPORT macros should be checked
+ correspondingly.)
+ The \fBXBMLANGPATH\fP specifies the path for
+--- a/doc/man/man3/XmHierarchyGetChildNodes.3
++++ b/doc/man/man3/XmHierarchyGetChildNodes.3
+@@ -69,8 +69,8 @@
+ \fBXmHierarchy\fP(3)\&.
+ .SH "RETURN"
+ .PP
+-Returns WidgetList with child nodes of the hierachy, or NULL
+-if the hierachy contains no children\&.
++Returns WidgetList with child nodes of the hierarchy, or NULL
++if the hierarchy contains no children\&.
+ .SH "RELATED"
+ .PP
+ \fBXmHierarchy\fP(3)\&.
+--- a/doc/man/man3/XmManager.3
++++ b/doc/man/man3/XmManager.3
+@@ -502,7 +502,7 @@
+ Indicates whether the posting process should continue\&. The
+ application may modify this field\&.
+ .IP "\fItarget\fP" 10
+-Specifies the most specific widget or gadget that the menu sytem found
++Specifies the most specific widget or gadget that the menu system found
+ from the event that matches the event\&.
+ .SS "Translations"
+ .PP
+--- a/doc/man/man3/XmPrimitive.3
++++ b/doc/man/man3/XmPrimitive.3
+@@ -609,7 +609,7 @@
+ Indicates whether the posting process should continue\&. The
+ application may modify this field\&.
+ .IP "\fItarget\fP" 10
+-Specifies the most specific widget or gadget that the menu sytem found
++Specifies the most specific widget or gadget that the menu system found
+ from the event that matches the event\&.
+ .SS "Translations"
+ .PP
+--- a/doc/man/man3/XmRendition.3
++++ b/doc/man/man3/XmRendition.3
+@@ -71,7 +71,7 @@
+ If a resource in a rendition is unspecified, usually by setting it to
+ \fBXmAS_IS\fP or \fBXmUNSPECIFIED_PIXEL\fP,
+ then the value to be used for that resource is the value of the
+-immediately preceeding rendition in \fBXmString\fR\&. If that value
++immediately preceding rendition in \fBXmString\fR\&. If that value
+ is unspecified, then the preceding value is used, and so on\&. If
+ no renditions specify a value for a resource, then a default value
+ will be used\&.
+--- a/doc/man/man3/XmStringGetNextComponent.3
++++ b/doc/man/man3/XmStringGetNextComponent.3
+@@ -111,7 +111,7 @@
+ \fBXmSTRING_COMPONENT_UNKNOWN\fP\&. The data returned by these
+ components is returned in the \fIunknown_tag\fP, \fIunknown_length\fP,
+ and \fIunknown_value\fP fields\&. This apparent inconsistency is
+-designed to accomodate older applications that may not be equipped to
++designed to accommodate older applications that may not be equipped to
+ handle the newer component types of Motif version 2\&.0 and beyond\&.
+ Consequently, the use of this procedure is not recommended\&. Instead,
+ use the \fBXmStringGetNextTriple\fP procedure, which provides all the
+--- a/doc/man/man3/XmFontListEntryLoad.3
++++ b/doc/man/man3/XmFontListEntryLoad.3
+@@ -101,7 +101,7 @@
+ .PP
+ If the specified font is not found, or if the specified font
+ set cannot be created, then either an implementation-defined font will
+-be opened or a font set will be created, and a warning messge will be
++be opened or a font set will be created, and a warning message will be
+ generated\&. If no suitable font can be found or a font set cannot be created,
+ then another message will be generated and the function will return
+ NULL; otherwise the function returns a font list entry\&.
+--- a/doc/man/man3/XmFrame.3
++++ b/doc/man/man3/XmFrame.3
+@@ -79,7 +79,7 @@
+ the Manager\&'s \fBXmNshadowThickness\fP resource defaults to 1\&.
+ .PP
+ If the Frame\&'s parent is not a Shell widget,
+-the \fBXmNshadowType\fP resouce defaults to \fBXmSHADOW_ETCHED_IN\fP, and
++the \fBXmNshadowType\fP resource defaults to \fBXmSHADOW_ETCHED_IN\fP, and
+ the Manager\&'s \fBXmNshadowThickness\fP resource defaults to 2\&.
+ .SS "Classes"
+ .PP
+--- a/doc/man/man3/XmTabStack.3
++++ b/doc/man/man3/XmTabStack.3
+@@ -375,7 +375,7 @@
+ .wH .rE
+ .IP "\fBXmNtabStringDirection\fP"
+ Specifies the string direction for the XmString portion of the tab
+-label. Valid values for this resouce include:
++label. Valid values for this resource include:
+ .wH .re
+ .RS
+ .TP
+--- a/doc/man/man3/XmLabel.3
++++ b/doc/man/man3/XmLabel.3
+@@ -485,7 +485,7 @@
+ \fBXmBUTTON_RENDER_TABLE\fP value of the ancestor widget\&. (Note that all
+ current subclasses of Label are button subclasses\&.) If no such
+ ancestor is found, the default is implementation dependent\&. If a font
+-list and a render table are both sepcified, the render table will take
++list and a render table are both specified, the render table will take
+ precedence\&. Refer to \fBXmRenderTable\fP(3) for more information on
+ the creation and structure of a render table\&.
+ .IP "\fBXmNstringDirection\fP" 10
+--- a/doc/man/man3/XmNotebook.3
++++ b/doc/man/man3/XmNotebook.3
+@@ -418,7 +418,7 @@
+ Specifies the background color for drawing back pages\&.
+ The default is a lower-intensity version of \fBXmNframeBackground\fP\&.
+ .IP "\fBXmNbackPageForeground\fP" 10
+-Specifies the forground color for drawing back pages\&. The default is
++Specifies the foreground color for drawing back pages\&. The default is
+ taken from the application\&'s default foreground color\&.
+ .IP "\fBXmNbackPageNumber\fP" 10
+ Specifies the number of lines to draw for back pages\&. The minimum value is
+--- a/doc/man/man3/XmPrintSetup.3
++++ b/doc/man/man3/XmPrintSetup.3
+@@ -65,7 +65,7 @@
+ A function that does the appropriate setting and creates a realized 
+ \fBXmPrintShell\fP that it returns to the caller\&. This
+ function hides the details of the \fBXt\fP to set up a valid print shell
+-heirarchy for the application\&. It is also meant
++hierarchy for the application\&. It is also meant
+ to encourage consistency in the way applications root their print widget
+ hierarchy\&.
+ .PP
+--- a/doc/man/man3/XmSlideContext.3
++++ b/doc/man/man3/XmSlideContext.3
+@@ -138,7 +138,7 @@
+ .SS "Behavior"
+ XmSlideContext behavior is described below:
+ XmSlideContext installs an Xt timer that is called every XmNslideInterval
+-miliseconds. At each call of the timer proc the XmNslideWidget geometry is
++milliseconds. At each call of the timer proc the XmNslideWidget geometry is
+ adjusted such that the X/Y/Width/Height are 10 percent closer to the 
+ final values. The XmSlideContext is automatically destroyed when the
+ XmNslideWidget reaches its destination. If the XmNslideWidget is destroyed
+--- a/doc/man/man3/XmTabStackXYToWidget.3
++++ b/doc/man/man3/XmTabStackXYToWidget.3
+@@ -72,7 +72,7 @@
+ Specifies Y coordinate to convert
+ .SH "RETURN"
+ .PP
+-Returns the widget ID of the tab occuring in the cpecified coordinate\&.
++Returns the widget ID of the tab occurring in the cpecified coordinate\&.
+ .SH "RELATED"
+ .PP
+ \fBXmTabStack\fP(3)\&.
+--- a/doc/man/man5/UIL.5
++++ b/doc/man/man5/UIL.5
+@@ -1755,7 +1755,7 @@
+ .IP "\fBCOMPOUND_STRING_COMPONENT\fP(\fIcomponent_type\fP [, {\fIstring\fP | \fIenumval\fP}])" 10
+ Use the \fBCOMPOUND_STRING_COMPONENT\fP function to create compound strings
+ in UIL consisting of single components\&.
+-This function is analagous to \fBXmStringComponentCreate\fP\&.
++This function is analogous to \fBXmStringComponentCreate\fP\&.
+ This function lets you create simple compound strings containing
+ components such as \fBXmSTRING_COMPONENT_TAB\fP and
+ \fBXmSTRING_COMPONENT_RENDITION_BEGIN\fP which are not produced by
+--- a/doc/man/man4/mwmrc.4
++++ b/doc/man/man4/mwmrc.4
+@@ -411,7 +411,7 @@
+ .fi
+ .PP
+ .PP
+-The following table indicates the values that can be used for \fBmodifier_name\fP\&. Note that [Alt] and [Meta] can be used interchangably
++The following table indicates the values that can be used for \fBmodifier_name\fP\&. Note that [Alt] and [Meta] can be used interchangeably
+ on some hardware\&.
+ .PP
+ .TS
+--- a/doc/man/man3/XmFontSelector.3
++++ b/doc/man/man3/XmFontSelector.3
+@@ -78,7 +78,7 @@
+ .PP
+ .SH Encoding
+ .PP
+-The programmer can specify which encidings are valid selctions. These encoding choices appear in an option menu. The list of font choices is restricted to those which use the current selected coding. 
++The programmer can specify which encidings are valid selections. These encoding choices appear in an option menu. The list of font choices is restricted to those which use the current selected coding. 
+ .PP
+ .SH XLFD Name Display
+ .PP
+--- a/doc/man/man3/XmIconButton.3
++++ b/doc/man/man3/XmIconButton.3
+@@ -94,7 +94,7 @@
+ .SH label
+ .PP
+ The string to display in this button. This string can only have one font, but can be 
+-any number of lines long. Use the NEW_LINE character ( '\n' ) to separate lines. This resource has been superceded by labelString, but is included for backwards compatibility. If XmNlabelString is set , XmNlabel is ignored
++any number of lines long. Use the NEW_LINE character ( '\n' ) to separate lines. This resource has been superseded by labelString, but is included for backwards compatibility. If XmNlabelString is set , XmNlabel is ignored
+ .PP
+ .SH labelString
+ .PP
+--- a/doc/man/man3/XmStringToXmStringTable.3
++++ b/doc/man/man3/XmStringToXmStringTable.3
+@@ -82,7 +82,7 @@
+ .IP "\fItable\fP" 10
+ Returns the equivalent \fBXmStringTable\fR\&.
+ The function will allocate space to hold the returned \fBXmStringTable\fR\&.
+-When the applicaiton no longer needs the returned \fBXmStringTable\fR,
++When the application no longer needs the returned \fBXmStringTable\fR,
+ the application should call \fBXmStringFree\fP
+ once for each compound string in the table,
+ and then calling \fBXtFree\fP to deallocate the \fBXmStringTable\fR itself\&.
+--- a/doc/man/man3/XmPrintShell.3
++++ b/doc/man/man3/XmPrintShell.3
+@@ -298,7 +298,7 @@
+ .PP
+ Examples of \fBXmNdefaultPixmapResolution\fP usage:
+ .IP "   \(bu" 6
+-An application reuses the same image sources it uses for the video interface, in XBM, XPM, PNG ot JPEG, to layout on its printed pages\&. In this case, scaling is seamless\&.
++An application reuses the same image sources it uses for the video interface, in XBM, XPM, PNG or JPEG, to layout on its printed pages\&. In this case, scaling is seamless\&.
+ .PP
+ .nf
+ \f(CW    ! icon\&.xpm is 30x30 pixels
+--- a/doc/man/man3/XmContainer.3
++++ b/doc/man/man3/XmContainer.3
+@@ -1207,7 +1207,7 @@
+ is a pointer to the \fBXmDropProcCallbackStruct\fR passed to the
+ \fBXmNdropProc\fP procedure\&.
+ When the selection is \fBSECONDARY\fP, \fIdestination_data\fP is an Atom
+-representing a target recommmended by the selection owner for use in
++representing a target recommended by the selection owner for use in
+ converting the selection\&.
+ Otherwise, \fIdestination_data\fP is NULL\&.
+ .IP "\fBlocation_data\fP" 10
+--- a/doc/man/man3/XmDrawingArea.3
++++ b/doc/man/man3/XmDrawingArea.3
+@@ -512,7 +512,7 @@
+ is a pointer to the \fBXmDropProcCallbackStruct\fR passed to the
+ \fBXmNdropProc\fP procedure\&.
+ When the selection is \fBSECONDARY\fP, \fIdestination_data\fP is an Atom
+-representing a target recommmended by the selection owner for use in
++representing a target recommended by the selection owner for use in
+ converting the selection\&.
+ Otherwise, \fIdestination_data\fP is NULL\&.
+ .IP "\fBlocation_data\fP" 10
+--- a/doc/man/man3/XmList.3
++++ b/doc/man/man3/XmList.3
+@@ -902,7 +902,7 @@
+ is a pointer to the \fBXmDropProcCallbackStruct\fR passed to the
+ \fBXmNdropProc\fP procedure\&.
+ When the selection is \fBSECONDARY\fP, \fIdestination_data\fP is an Atom
+-representing a target recommmended by the selection owner for use in
++representing a target recommended by the selection owner for use in
+ converting the selection\&.
+ Otherwise, \fIdestination_data\fP is NULL\&.
+ .IP "\fBlocation_data\fP" 10
+--- a/doc/man/man3/XmText.3
++++ b/doc/man/man3/XmText.3
+@@ -1058,7 +1058,7 @@
+ When the selection is \fBSECONDARY\fP,
+ \fIdestination_data\fP
+ is an Atom
+-representing a target recommmended by the selection owner for use in
++representing a target recommended by the selection owner for use in
+ converting the selection\&.
+ Otherwise, \fIdestination_data\fP is NULL\&.
+ .IP "\fBlocation_data\fP" 10
+--- a/doc/man/man3/XmTextField.3
++++ b/doc/man/man3/XmTextField.3
+@@ -879,7 +879,7 @@
+ When the selection is \fBSECONDARY\fP,
+ \fIdestination_data\fP
+ is an Atom
+-representing a target recommmended by the selection owner for use in
++representing a target recommended by the selection owner for use in
+ converting the selection\&.
+ Otherwise, \fIdestination_data\fP is NULL\&.
+ .IP "\fBlocation_data\fP" 10
